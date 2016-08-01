@@ -64,6 +64,19 @@ class CardsgameBlock(XBlock):
 
     @XBlock.json_handler
     def prob_submit(self, data, suffix=''):
-        self.problem = []
-        self.problem.append( (data.get('Description'), data.get('options')) )
+        self.problem.append( (data.get('Description'), data.get('options'), data.get('ans')) )
         return {'result': 'success', 'data': self.problem}
+
+    @XBlock.json_handler
+    def get_all_prob(self, data, suffix=''):
+        return {'data': self.problem}
+
+    @XBlock.json_handler
+    def get_rand_prob(self, data, suffix=''):
+        return {'description': self.problem[0][0], 'options': self.problem[0][1], 'ans': self.problem[0][2]}
+
+    @XBlock.json_handler
+    def delete_prob(self, data, suffix=''):
+        prob_id = int(data.get('id'))
+        self.problem.pop(prob_id)
+        return {'result': 'success'}

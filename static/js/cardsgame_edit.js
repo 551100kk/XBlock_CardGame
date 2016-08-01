@@ -34,22 +34,82 @@ function prob_submit(runtime, element) {
     console.log(ans);
     console.log(options);
     console.log('start');
-    /*$.ajax({
+    $.ajax({
         type: "POST",
         url: runtime.handlerUrl(element, 'prob_submit'),
         data: JSON.stringify({
             'Description': $(element).find('textarea[name=Description]').val(),
             'options': options,
+            'ans': ans,
         }),
         success: function(result) {
-            console.log(result);
+            get_all_prob(runtime, element);
         }
-    }); */
+    }); 
+}
+function get_all_prob(runtime, element) {
+    $.ajax({
+        type: "POST",
+        url: runtime.handlerUrl(element, 'get_all_prob'),
+        data: JSON.stringify({
+        }),
+        success: function(result) {
+            var html = '';
+            var template = '\
+                <div class="panel panel-default">\
+                    <div class="panel-heading">\
+                         <a class="panel-title show_prob" data-toggle="collapse" data-parent="problem_pools" value="cardid">Card cardid</a>\
+                    </div>\
+                    <div id="card_cardid" class="panel-collapse collapse">\
+                        <div class="panel-body">\
+                            <pre>innerText...</pre>\
+                            <a type="button" class="btn btn-danger delete_prob" value="cardid" style="width: 100%">Delete</a>\
+                        </div>\
+                    </div>\
+                </div>\
+            ';
+            for(var i = 0; i < result.data.length; i++){
+                var prob = template.replace(/cardid/g, String(i));
+                var text = 'Description:\n';
+                text += result.data[i][0] + '\n';
+                text += 'Options:\n';
+                for(var j = 0; j < result.data[i][1].length; j++){
+                    text += '(' + result.data[i][2][j] + ') ' + result.data[i][1][j] + '\n';
+                }
+                prob = prob.replace('innerText...', text);
+                html += prob;
+            }
+            $(element).find('div[id=problem_pools]')[0].innerHTML = html;
+            //bind problem pools
+            $(element).find('.show_prob').unbind('click').bind('click', function() {
+                var cnt = this.getAttribute('value');
+                var block = $(element).find('div[id=card_' + cnt + ']')[0];
+                if(block.getAttribute('class') == 'panel-collapse collapse in'){
+                    block.setAttribute('class', 'panel-collapse collapse');
+                }
+                else{
+                    block.setAttribute('class', 'panel-collapse collapse in');
+                }
+            });
+            //bind del btn
+            $(element).find('.delete_prob').unbind('click').bind('click', function() {
+                var id = this.getAttribute('value');
+                $.ajax({
+                    type: "POST",
+                    url: runtime.handlerUrl(element, 'delete_prob'),
+                    data: JSON.stringify({
+                        'id': id,
+                    }),
+                    success: function(result) {
+                        get_all_prob(runtime, element);
+                    }
+                }); 
+            });
+        }
+    }); 
 }
 function bindans(runtime, element) {
     $(element).find('.ans').unbind('click').bind('click', function() {
-        console.log(this.getAttribute('class'));
-        console.log(this.getAttribute('value'));
         if(this.getAttribute('value') == 0){
             this.setAttribute('value', 1);
             this.setAttribute('class', 'btn btn-success ans');
@@ -88,4 +148,5 @@ function main(runtime, element) {
         prob_submit(runtime, element);
     });
     bindans(runtime, element);
+    get_all_prob(runtime, element);
 }

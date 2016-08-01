@@ -21,3 +21,9 @@
 .all_option .prob_option{
 	padding: 0;
 }
+.prob_submit{
+	text-align: center;
+}
+.show_prob{
+	cursor: pointer;
+}
