@@ -20,6 +20,10 @@ class CardsgameBlock(XBlock):
 
     #DATABASE
 
+    display_name = String(help="", default="CardGame", scope=Scope.content)
+    problem = List(scope=Scope.content)
+    #student
+
     def student_view(self,context):
         #self.reset()
         #html
@@ -53,7 +57,13 @@ class CardsgameBlock(XBlock):
     
     def get_user_id(self):
         return self.xmodule_runtime.anonymous_student_id
-        
+
     @XBlock.json_handler
     def studio_submit(self, data, suffix=''):
         return {'result': 'success'}
+
+    @XBlock.json_handler
+    def prob_submit(self, data, suffix=''):
+        self.problem = []
+        self.problem.append( (data.get('Description'), data.get('options')) )
+        return {'result': 'success', 'data': self.problem}

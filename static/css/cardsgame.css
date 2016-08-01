@@ -5,3 +5,19 @@
 	width: 100%;
 	cursor: pointer;
 }
+.add_option:hover{
+	cursor: pointer;
+}
+.remove_option:hover{
+	cursor: pointer;
+}
+.prob_submit:hover{
+	cursor: pointer;
+}
+.all_option .btn{
+	width: 7%;
+	margin-left: 0.5%;
+}
+.all_option .prob_option{
+	padding: 0;
+}
