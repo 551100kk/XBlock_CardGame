@@ -1,0 +1,7 @@
+cardsgame.py
+xblock_cardsgame.egg-info/PKG-INFO
+xblock_cardsgame.egg-info/SOURCES.txt
+xblock_cardsgame.egg-info/dependency_links.txt
+xblock_cardsgame.egg-info/entry_points.txt
+xblock_cardsgame.egg-info/requires.txt
+xblock_cardsgame.egg-info/top_level.txt
