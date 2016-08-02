@@ -36,12 +36,22 @@
             <img class="center-block show" src="/xblock/resource/cardsgame/public/img/allcards/allcards [www.imagesplitter.net]-1-12.png">
         </div>
         <div class="col-md-8 problem">
-            <h3 style="font-weight: bolder; margin-top: 0;">Description</h3>
-            <pre style="width: 90%">Description</pre>
-            <a  type="button" class="btn btn-default stu_ans" name="ans0" value="0">False</a><br>
-            <a  type="button" class="btn btn-default stu_ans" name="ans1" value="1">False</a><br>
-            <a  type="button" class="btn btn-default stu_ans" name="ans2" value="2">False</a><br>
-
+            <h3 style="margin-top: 0;">Description</h3>
+            <pre class="description" style="width: 90%"></pre>
+            <div class="option">
+            </div><br>
+            <!--<a type="button" class="btn btn-primary check_ans">Check</a>
+            <a type="button" class="btn btn-warning giveup">Give up and try next QQ</a>-->
+            <div class="row">
+                <div class="col-md-5">
+                    <img class="check_ans" src="/xblock/resource/cardsgame/public/img/haha.png">
+                </div>
+                <div class="col-md-5">
+                    <img class="giveup" src="/xblock/resource/cardsgame/public/img/gg.png">
+                </div> 
+                <div class="col-md-2">
+                </div> 
+            </div>
         </div>
     </div>
     <br>
@@ -50,7 +60,7 @@
             <div class="panel-group" id="problem">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                         <a class="panel-title" data-toggle="collapse" data-parent="problem">Your Card</a>
+                         <a class="panel-title" data-toggle="collapse" data-parent="problem">Your Cards</a>
                     </div>
                     <div id="panel-element-problem" class="panel-collapse collapse in">
                         <div class="panel-body">

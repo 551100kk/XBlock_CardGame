@@ -1,3 +1,6 @@
+h3{
+	font-weight: bolder;
+}
 .card{
     width: 90%;
 }
@@ -40,4 +43,10 @@
 .stu_ans{
 	width: 90%;
 	margin-top: 3px;
+}
+.check_ans{
+	width: 40%;
+}
+.giveup{
+	width: 40%;
 }
