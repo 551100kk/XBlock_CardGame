@@ -68,13 +68,14 @@ function get_all_prob(runtime, element) {
                     </div>\
                 </div>\
             ';
+            var str = 'XO';
             for(var i = 0; i < result.data.length; i++){
                 var prob = template.replace(/cardid/g, String(i));
                 var text = 'Description:\n';
                 text += result.data[i][0] + '\n';
                 text += 'Options:\n';
                 for(var j = 0; j < result.data[i][1].length; j++){
-                    text += '(' + result.data[i][2][j] + ') ' + result.data[i][1][j] + '\n';
+                    text += '(' + str[ result.data[i][2][j] ] + ') ' + result.data[i][1][j] + '\n';
                 }
                 prob = prob.replace('innerText...', text);
                 html += prob;

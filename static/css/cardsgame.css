@@ -27,3 +27,17 @@
 .show_prob{
 	cursor: pointer;
 }
+.show{
+	width: 0;
+}
+#message{
+	padding-left: 20px;
+}
+.problem{
+	opacity: 0;
+	display: none;
+}
+.stu_ans{
+	width: 90%;
+	margin-top: 3px;
+}

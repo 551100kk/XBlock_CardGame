@@ -15,11 +15,13 @@ import urllib
 import urllib2
 import base64
 from easyprocess import EasyProcess
+import random
 
 class CardsgameBlock(XBlock):
 
     #DATABASE
-
+    current_problem = Integer(help="", default=-1, scope=Scope.user_state)
+    solved_problem = List(scope=Scope.user_state)
     display_name = String(help="", default="CardGame", scope=Scope.content)
     problem = List(scope=Scope.content)
     #student
@@ -73,7 +75,14 @@ class CardsgameBlock(XBlock):
 
     @XBlock.json_handler
     def get_rand_prob(self, data, suffix=''):
-        return {'description': self.problem[0][0], 'options': self.problem[0][1], 'ans': self.problem[0][2]}
+        probid = int(data.get('probid'))
+        if probid == -1:
+            probid = random.randint(1, len(self.problem)) - 1
+        return {'probid': probid, 'prob': self.problem[probid]}
+
+    @XBlock.json_handler
+    def checkunsolve(self, data, suffix=''):
+        return {'result': self.current_problem}
 
     @XBlock.json_handler
     def delete_prob(self, data, suffix=''):
