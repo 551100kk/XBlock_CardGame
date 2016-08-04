@@ -45,8 +45,23 @@ h3{
 	margin-top: 3px;
 }
 .check_ans{
-	width: 40%;
+	width: 30%;
 }
 .giveup{
-	width: 40%;
+	width: 30%;
+}
+.check_ans:hover{
+	cursor: pointer;
+}
+.giveup:hover{
+	cursor: pointer;
+}
+.prob_status{
+	width: 90%;
+	top: 0;
+	left: 0;
+  	right: 0;
+  	bottom: 0;
+	position: absolute;
+	text-align: center;
 }

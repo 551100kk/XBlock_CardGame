@@ -78,7 +78,18 @@ class CardsgameBlock(XBlock):
         probid = int(data.get('probid'))
         if probid == -1:
             probid = random.randint(1, len(self.problem)) - 1
+            self.current_problem = probid
         return {'probid': probid, 'prob': self.problem[probid]}
+
+    @XBlock.json_handler
+    def checkans(self, data, suffix=''):
+        user_ans = data.get('ans')
+        for x, y in zip(self.problem[self.current_problem][2], user_ans):
+            if int(x) != y:
+                return  {'result': 'wrong'}
+            pass
+        #current_problem = -1
+        return {'result': 'pass'}
 
     @XBlock.json_handler
     def checkunsolve(self, data, suffix=''):
