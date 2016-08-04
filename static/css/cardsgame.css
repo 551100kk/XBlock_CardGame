@@ -45,10 +45,7 @@ h3{
 	margin-top: 3px;
 }
 .check_ans{
-	width: 30%;
-}
-.giveup{
-	width: 30%;
+	width: 100%;
 }
 .check_ans:hover{
 	cursor: pointer;
