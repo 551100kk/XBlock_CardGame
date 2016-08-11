@@ -21,9 +21,15 @@ class CardsgameBlock(XBlock):
 
     #DATABASE
     current_problem = Integer(help="", default=-1, scope=Scope.user_state)
+    score = Integer(help="", default=0, scope=Scope.user_state)
     solved_problem = List(scope=Scope.user_state)
     display_name = String(help="", default="CardGame", scope=Scope.content)
     problem = List(scope=Scope.content)
+    
+
+    wrong_pts = -50;
+    correct_pts = 500;
+
     #student
 
     def student_view(self,context):
@@ -86,17 +92,34 @@ class CardsgameBlock(XBlock):
         user_ans = data.get('ans')
         for x, y in zip(self.problem[self.current_problem][2], user_ans):
             if int(x) != y:
+                if not self.current_problem in self.solved_problem:
+                    self.score += self.wrong_pts;
                 return  {'result': 'wrong'}
             pass
-        #current_problem = -1
-        return {'result': 'pass'}
+        if not self.current_problem in self.solved_problem:
+            self.score += self.correct_pts;
+            self.solved_problem.append(self.current_problem)
+        self.current_problem = -1
+        return {'result': 'pass',}
 
     @XBlock.json_handler
     def checkunsolve(self, data, suffix=''):
         return {'result': self.current_problem}
 
     @XBlock.json_handler
+    def checkallcard(self, data, suffix=''):
+        return {'result': self.solved_problem}
+
+    @XBlock.json_handler
     def delete_prob(self, data, suffix=''):
         prob_id = int(data.get('id'))
         self.problem.pop(prob_id)
         return {'result': 'success'}
+
+    @XBlock.json_handler
+    def getscore(self, data, suffix=''):
+        return {'id': self.get_user_id(), 'score': self.score}
+
+    @XBlock.json_handler
+    def modifyscore(self, data, suffix=''):
+        return {'result': 'success'};
