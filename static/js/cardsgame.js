@@ -8,7 +8,9 @@ function getscore(){
         }),
         success: function(result) {
             $(main.prototype.element).find('span[name=hashid]')[0].innerText = 'HashID: ' + result.id;
-            $(main.prototype.element).find('span[name=perscore]')[0].innerText = 'Scores: ' + result.score + ' pts';
+            var scores = 'Scores: ' + result.score + '/1200 pts';
+            if(result.score >= 1200) scores += ' ( PASSED )';
+            $(main.prototype.element).find('span[name=perscore]')[0].innerText = scores;
             console.log(result.users);
             var html = '';
             for(var i = 0; i < result.users.length; i++){
