@@ -9,7 +9,24 @@ function getscore(){
         success: function(result) {
             $(main.prototype.element).find('span[name=hashid]')[0].innerText = 'HashID: ' + result.id;
             $(main.prototype.element).find('span[name=perscore]')[0].innerText = 'Scores: ' + result.score + ' pts';
-            //console.log(result.result);
+            console.log(result.users);
+            var html = '';
+            for(var i = 0; i < result.users.length; i++){
+                var template = '\
+                    <tr(type)>\
+                        <td>rank</td>\
+                        <td>hash</td>\
+                        <td>scores</td>\
+                    </tr>';
+                if(i % 2) template = template.replace('(type)', ' class="active"');
+                else template = template.replace('(type)', '');
+                template = template.replace('rank', i + 1);
+                template = template.replace('hash', result.users[i][0]);
+                template = template.replace('scores', result.users[i][1]);
+                html += template;
+                console.log(template);
+            }
+            $(main.prototype.element).find('.ranking')[0].innerHTML = html;
         }
     }); 
 }

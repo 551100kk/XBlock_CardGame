@@ -24,8 +24,11 @@ class CardsgameBlock(XBlock):
     score = Integer(help="", default=0, scope=Scope.user_state)
     solved_problem = List(scope=Scope.user_state)
     display_name = String(help="", default="CardGame", scope=Scope.content)
+
     problem = List(scope=Scope.content)
-    
+
+    all_users = List(scope=Scope.user_state_summary)
+    all_scores = List(scope=Scope.user_state_summary)
 
     wrong_pts = -50;
     correct_pts = 500;
@@ -90,12 +93,12 @@ class CardsgameBlock(XBlock):
     @XBlock.json_handler
     def checkans(self, data, suffix=''):
         user_ans = data.get('ans')
-        for x, y in zip(self.problem[self.current_problem][2], user_ans):
-            if int(x) != y:
-                if not self.current_problem in self.solved_problem:
-                    self.score += self.wrong_pts;
-                return  {'result': 'wrong'}
-            pass
+
+        if any( int(x) != y for x, y in zip(self.problem[self.current_problem][2], user_ans) ) :
+            if not self.current_problem in self.solved_problem:
+                self.score += self.wrong_pts;
+            return  {'result': 'wrong'}
+
         if not self.current_problem in self.solved_problem:
             self.score += self.correct_pts;
             self.solved_problem.append(self.current_problem)
@@ -118,7 +121,18 @@ class CardsgameBlock(XBlock):
 
     @XBlock.json_handler
     def getscore(self, data, suffix=''):
-        return {'id': self.get_user_id(), 'score': self.score}
+        userid = self.get_user_id()
+
+        if not userid in self.all_users:
+            self.all_users.append(userid)
+            self.all_scores.append(self.score)
+
+        idx = self.all_users.index(userid)
+        self.all_scores[idx] = self.score
+
+        arr = sorted(zip(self.all_users, self.all_scores), lambda x: x[1] * -1)
+
+        return {'id': self.get_user_id(), 'score': self.score, 'users': arr}
 
     @XBlock.json_handler
     def modifyscore(self, data, suffix=''):
