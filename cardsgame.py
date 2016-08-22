@@ -32,7 +32,7 @@ class CardsgameBlock(XBlock):
 
     wrong_pts = -50;
     correct_pts = 500;
-
+    magic = 250
     #student
 
     def student_view(self,context):
@@ -96,11 +96,11 @@ class CardsgameBlock(XBlock):
 
         if any( int(x) != y for x, y in zip(self.problem[self.current_problem][2], user_ans) ) :
             if not self.current_problem in self.solved_problem:
-                self.score += self.wrong_pts;
+                self.score += self.wrong_pts
             return  {'result': 'wrong'}
 
         if not self.current_problem in self.solved_problem:
-            self.score += self.correct_pts;
+            self.score += self.correct_pts
             self.solved_problem.append(self.current_problem)
         self.current_problem = -1
         return {'result': 'pass',}
@@ -135,5 +135,11 @@ class CardsgameBlock(XBlock):
         return {'id': self.get_user_id(), 'score': self.score, 'users': arr}
 
     @XBlock.json_handler
-    def modifyscore(self, data, suffix=''):
-        return {'result': 'success'};
+    def magicused(self, data, suffix=''):
+        if -1 in self.solved_problem:
+            return {'result': 'failed'}
+
+        self.solved_problem.append(-1)
+        self.score += self.magic
+
+        return {'result': 'success'}

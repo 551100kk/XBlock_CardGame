@@ -79,9 +79,12 @@ h3{
 }
 .personal_score{
 	display: block;
-	margin: 30px;
+	margin: 20px;
 	color: blue;
 	font-weight: bolder;
 	font-size: 20px;
 	text-align: center;
+}
+.magic:hover{
+	cursor: pointer;
 }

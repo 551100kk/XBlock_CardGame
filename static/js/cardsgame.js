@@ -32,19 +32,6 @@ function getscore(){
         }
     }); 
 }
-function modifyscore(val){
-    $.ajax({
-        type: "POST",
-        url: main.prototype.runtime.handlerUrl(main.prototype.element, 'modifyscore'),
-        data: JSON.stringify({
-            'val': val,
-        }),
-        success: function(result) {
-            console.log(result);
-            getscore();
-        }
-    }); 
-}
 function opacity(cnt){
     $(main.prototype.element).find('.show').css('opacity', 0.01*(100-cnt));
     $(main.prototype.element).find('.problem').css('opacity', 0.01*(100-cnt));
@@ -157,14 +144,14 @@ function checkans(){
             var status = $(main.prototype.element).find('.prob_status')[0];
             if(result.result == 'pass'){
                 score('+500');
-                modifyscore(500);
+                getscore();
                 show_problem = 0;
                 status.setAttribute('src', '/xblock/resource/cardsgame/public/img/correct.png');
                 correct($(main.prototype.element).find('.prob_status'), 50);
             }
             else{
                 score('-50');
-                modifyscore(-50);
+                getscore();
                 status.setAttribute('src', '/xblock/resource/cardsgame/public/img/cross.png');
                 worng($(main.prototype.element).find('.prob_status'), 4);
             }
@@ -190,6 +177,42 @@ function checkunsolve(){
         }
     }); 
 }
+//all cards
+var image = {
+    'magic': '/xblock/resource/cardsgame/public/img/magic.png',
+    '-1': '/xblock/resource/cardsgame/public/img/joker1.png',
+}
+var ismagic = 0;
+function magicdown(cnt){
+    $(main.prototype.element).find('.magic').css('opacity', 0.01*(50+cnt));
+    if(cnt == 0){
+        if(ismagic){
+            magicup(50);
+        }
+        return;
+    }
+    setTimeout(function(){magicdown(cnt-1)}, 50);
+}
+function magicup(cnt){
+    $(main.prototype.element).find('.magic').css('opacity', 0.01*(100-cnt));
+    if(cnt == 0){
+        magicdown(50);
+        return;
+    }
+    setTimeout(function(){magicup(cnt-1)}, 50);
+}
+function magicused(){
+    $.ajax({
+        type: "POST",
+        url: main.prototype.runtime.handlerUrl(main.prototype.element, 'magicused'),
+        data: JSON.stringify({
+        }),
+        success: function(result) {
+            getscore();
+            checkallcard();
+        }
+    }); 
+}
 function checkallcard(){
     $.ajax({
         type: "POST",
@@ -197,13 +220,49 @@ function checkallcard(){
         data: JSON.stringify({
         }),
         success: function(result) {
-            var html = '';
+            var html = ''; 
+            var red = 0;
+            var black = 0;
+            var magic = 1;
+
             for(var i = 0; i < result.result.length; i++){
-                var url = '/xblock/resource/cardsgame/public/img/allcards/allcards [www.imagesplitter.net]-' + (result.result[i] % 4) + '-' + parseInt(result.result[i] / 4) + '.png';
-                html += '<img class="card_list" src="url">'.replace('url', url);
+                //add card
+                if(result.result[i] >= 0){
+                    var url = '/xblock/resource/cardsgame/public/img/allcards/allcards [www.imagesplitter.net]-' + (result.result[i] % 4) + '-' + parseInt(result.result[i] / 4) + '.png';
+                    html += '<img class="card_list" src="url">'.replace('url', url);
+                }
+                else{
+                    var url = image[result.result[i]];
+                    html += '<img class="card_list" src="url">'.replace('url', url);
+                }
+                //check magic
+                if(result.result[i] >= 0){
+                    if(result.result[i] % 2 == 0) red = 1;
+                    if(result.result[i] % 2 == 1) black = 1;    
+                }
+                else{
+                    if(result.result[i] == -1) magic = 0; 
+                }
             }
+
+            if(red && black && magic) html += '<img class="card_list magic" src="url">'.replace('url', image['magic']);
             $(main.prototype.element).find('.allcard')[0].innerHTML = html;
-            //console.log(result.result);
+
+            if(red && black && magic){
+                if(ismagic == 0){
+                    ismagic = 1;
+                    magicup(50);
+                }
+                $(main.prototype.element).find('.magic').bind('click', function(){
+                    this.parentElement.removeChild(this);
+                    ismagic = 0;
+                    score('+250');
+                    magicused();
+                    //alert('123');
+                });
+            }
+            
+            console.log(result.result);
         }
     }); 
 }

@@ -3,7 +3,7 @@ function add_option(runtime, element) {
     var template = '\
         <div class="list-group-item prob_option">\
             <a for="option_optioncnt" type="button" class="btn btn-default ans" name="ans_optioncnt" value="0">False</a>\
-            <input class="input setting-input" type="text" name="option_optioncnt" style="width: 92%">\
+            <input class="input setting-input" type="text" name="option_optioncnt" style="width: 91%">\
         </div>\
     ';
     var new_option = template.replace(/optioncnt/g, String(cnt));
