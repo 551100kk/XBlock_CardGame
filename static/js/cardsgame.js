@@ -1,15 +1,18 @@
 var show_problem = 0;
 var problem_status = 0;
+var passval = 2000
 function getscore(){
+    console.log('get scores');
     $.ajax({
         type: "POST",
         url: main.prototype.runtime.handlerUrl(main.prototype.element, 'getscore'),
         data: JSON.stringify({
         }),
         success: function(result) {
+            console.log(result);
             $(main.prototype.element).find('span[name=hashid]')[0].innerText = 'HashID: ' + result.id;
-            var scores = 'Scores: ' + result.score + '/1200 pts';
-            if(result.score >= 1200) scores += ' ( PASSED )';
+            var scores = 'Scores: ' + result.score + '/' + passval + ' pts';
+            if(result.score >= passval) scores += '\n( PASSED )';
             $(main.prototype.element).find('span[name=perscore]')[0].innerText = scores;
             console.log(result.users);
             var html = '';

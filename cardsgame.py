@@ -32,7 +32,7 @@ class CardsgameBlock(XBlock):
 
     wrong_pts = -50;
     correct_pts = 500;
-    magic = 250
+    magic = 1200
     #student
 
     def student_view(self,context):
@@ -130,7 +130,12 @@ class CardsgameBlock(XBlock):
         idx = self.all_users.index(userid)
         self.all_scores[idx] = self.score
 
-        arr = sorted(zip(self.all_users, self.all_scores), lambda x: x[1] * -1)
+        #arr = zip(self.all_users, self.all_scores)
+        #arr = sorted(arr, lambda x: x[1] * -1)
+
+        arr = sorted(zip(self.all_users, self.all_scores), key=lambda x: x[1] * -1)
+
+        #arr = []
 
         return {'id': self.get_user_id(), 'score': self.score, 'users': arr}
 
